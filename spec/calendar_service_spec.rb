@@ -1,5 +1,7 @@
 require_relative '../service/calendar_service'
 require_relative '../service/cf_api'
+require_relative '../database/booking'
+
 require 'date'
 
 describe Service::CalendarService do
@@ -25,6 +27,7 @@ describe Service::CalendarService do
             ]
           }
         allow_any_instance_of(Service::CfApi).to receive(:fetch_mentor_agenda).and_return(api_result)
+        allow_any_instance_of(Database::Booking).to receive(:all_bookings_for_date).and_return([])
 
         cs = Service::CalendarService.new Date.parse("2022-01-01")
         schedule = cs.fetch_schedule
@@ -54,10 +57,10 @@ describe Service::CalendarService do
             ]
           }
         allow_any_instance_of(Service::CfApi).to receive(:fetch_mentor_agenda).and_return(api_result)
+        allow_any_instance_of(Database::Booking).to receive(:all_bookings_for_date).and_return([])
 
         cs = Service::CalendarService.new Date.parse("2021-12-29")
         schedule = cs.fetch_schedule
-        puts schedule
         schedule.each do |s|
           slot_start = Time.parse(s[:slot_start_time])
           if slot_start.hour == 17
@@ -89,6 +92,7 @@ describe Service::CalendarService do
             ]
           }
         allow_any_instance_of(Service::CfApi).to receive(:fetch_mentor_agenda).and_return(api_result)
+        allow_any_instance_of(Database::Booking).to receive(:all_bookings_for_date).and_return([])
 
         cs = Service::CalendarService.new Date.parse("2021-12-29")
         schedule = cs.fetch_schedule
