@@ -2,8 +2,10 @@ require 'uri'
 require 'net/http'
 require 'json'
 
+require_relative '../exceptions'
+
 module Service
-  class CfApiService
+  class CfApi
 
     def fetch_mentor_agenda
       uri = URI("#{base_url}/#{mentor_agenda_url}")
@@ -11,7 +13,7 @@ module Service
       
       return JSON.parse(response.body) if response.is_a?(Net::HTTPSuccess)
       
-      raise "Unable to fetch mentor schedule" 
+      raise ::Exceptions::APIError.new("Unable to fetch mentor schedule")
     end
 
     private
